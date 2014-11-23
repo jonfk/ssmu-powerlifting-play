@@ -1,0 +1,11 @@
+# --- Created by Slick DDL
+# To stop Slick DDL generation, remove this comment and start using Evolutions
+
+# --- !Ups
+
+create table "SSMU_RECORDS" ("NAME" VARCHAR NOT NULL PRIMARY KEY,"WEIGHT_CLASS" VARCHAR NOT NULL,"GENDER" VARCHAR NOT NULL,"SQUAT" DOUBLE NOT NULL,"BENCH" DOUBLE NOT NULL,"DEADLIFT" DOUBLE NOT NULL,"TOTAL" DOUBLE NOT NULL,"WILKS" DOUBLE NOT NULL,"MEET" BOOLEAN NOT NULL);
+
+# --- !Downs
+
+drop table "SSMU_RECORDS";
+

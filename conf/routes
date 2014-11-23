@@ -1,0 +1,15 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+GET		/records					controllers.Application.records
+GET		/about						controllers.Application.about
+GET		/404						controllers.Application.notFound
+#Old stuff
+GET		/oldindex					controllers.Application.oldindex
+GET		/scaladoc					controllers.Application.scaladoc
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
