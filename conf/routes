@@ -6,6 +6,8 @@
 GET     /                           controllers.Application.index
 GET		/records					controllers.Application.records
 GET		/about						controllers.Application.about
+GET		/contact					controllers.Contact.contact
+POST	/contact					controllers.Contact.contactPost
 GET		/404						controllers.Application.notFound
 #Old stuff
 GET		/oldindex					controllers.Application.oldindex

@@ -11,6 +11,6 @@ libraryDependencies ++= Seq(
   anorm,
   cache,
   ws,
-  "com.sksamuel.elastic4s" %% "elastic4s" % "1.4.0",
-  "com.typesafe.play" %% "play-slick" % "0.8.0"
+  "com.typesafe.play" %% "play-slick" % "0.8.0",
+  "org.apache.commons" % "commons-email" % "1.3.3"
 )
