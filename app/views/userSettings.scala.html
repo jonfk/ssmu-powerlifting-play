@@ -1,0 +1,213 @@
+@(user: User, optProfile: Option[SSMUProfile])
+
+@main("User Settings", loggedIn=true, username=user.username,
+javascript=Html(
+"""
+"""
+)){
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Settings
+                    <small>Modify your profile, records and user settings</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">Settings</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Sidebar Column -->
+            <div class="col-md-3">
+                <div class="list-group" id="sidebar">
+                    <a href="#" class="list-group-item" data-id="profile">Profile</a>
+                    <a href="#" class="list-group-item" data-id="records">Records</a>
+                    <a href="#" class="list-group-item" data-id="settings">Settings</a>
+                </div>
+            </div>
+
+            <!-- Content Column -->
+			<div class="col-md-9">
+            	<div class="col-md-12" id="profile" >
+                	<h2>Profile</h2>
+
+                	<form action="settings/profile" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+                		@defining(optProfile match {
+		            		case Some(prof) =>
+		                		prof
+		            		case None =>
+		                		SSMUProfile(None, 0,"","","","","","","")
+						}
+						) { profile =>
+                		
+                		<input type="text" name="hasProfile" value="@{optProfile != None}" style="display:none">
+
+                    	<div class="form-group">
+                      		<label for="name" class="col-md-3 control-label">Name</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="name" placeholder="Name" value="@profile.name">
+                          	</div>
+                   		</div>
+
+                    	<div class="form-group">
+                      		<label for="description" class="col-md-3 control-label">Description</label>
+                         	<div class="col-md-9">
+                         		<input type="textarea" class="form-control" name="description" placeholder="Description" value="@profile.description">
+                          	</div>
+                   		</div>
+                   		
+                    	<div class="form-group">
+                      		<label for="image" class="col-md-3 control-label">image</label>
+                         	<div class="col-md-9">
+                         		<input id="image-input" type="file" class="file" name="image" multiple=false class="input-group" data-initial-caption="Image ratio of 750x450">
+                          	</div>
+                   		</div>
+
+                    	<div class="form-group">
+                      		<label for="weightClass" class="col-md-3 control-label">Weight Class</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="weightClass" placeholder="Weight Class (e.g -83kg)" value="@profile.weightClass">
+                          	</div>
+                   		</div>
+                   		
+                      	<div class="form-group">
+                        	<label for="facebook" class="col-md-3 control-label">Facebook <small>(optional)</small></label>
+                          	<div class="col-md-9">
+                            	<input type="text" class="form-control" name="facebook" placeholder="Facebook" value="@profile.facebook">
+                        	</div>
+                      	</div>
+
+                      	<div class="form-group">
+                        	<label for="youtube" class="col-md-3 control-label">Youtube Channel <small>(optional)</small></label>
+                          	<div class="col-md-9">
+                            	<input type="text" class="form-control" name="youtube" placeholder="Youtube" value="@profile.youtube">
+                        	</div>
+                      	</div>
+
+                      	<div class="form-group">
+                        	<label for="instagram" class="col-md-3 control-label">Instagram <small>(optional)</small></label>
+                          	<div class="col-md-9">
+                            	<input type="text" class="form-control" name="instagram" placeholder="Instagram" value="@profile.instagram">
+                        	</div>
+                      	</div>
+
+						@if(optProfile != None) {
+						<div class="form-group">
+							<div class="col-md-3"></div>
+                          	<div class="col-md-9">
+                    		<button type="submit" class="btn btn-primary">Save</button>
+                        	</div>
+						</div>
+						} else {
+						<div class="form-group">
+							<div class="col-md-3"></div>
+                          	<div class="col-md-9">
+                    		<button type="submit" class="btn btn-primary">Create</button>
+                        	</div>
+						</div>
+						}
+
+						}
+						<!-- end of profile definition -->
+                	</form>
+            	</div>
+
+            	<div class="col-md-12" id="records" style="display:none">
+                	<h2>Records</h2>
+
+                	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, et temporibus, facere perferendis veniam beatae non debitis, numquam blanditiis necessitatibus vel mollitia dolorum laudantium, voluptate dolores iure maxime ducimus fugit.</p>
+
+            	</div>
+
+            	<div class="col-md-12" id="settings" style="display:none">
+                	<h2>Settings</h2>
+
+                	<form action="settings/user" method="post" class="form-horizontal" role="form">
+
+                    	<div class="form-group">
+                      		<label for="email" class="col-md-3 control-label">Email</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="email" placeholder="Email Address" value="@user.email">
+                          	</div>
+                   		</div>
+
+                    	<div class="form-group">
+                      		<label for="username" class="col-md-3 control-label">Username</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="username" placeholder="Username" value="">
+                          	</div>
+                   		</div>
+                   		
+                    	<div class="form-group">
+                      		<label for="firstname" class="col-md-3 control-label">First Name</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="firstname" placeholder="First Name">
+                          	</div>
+                   		</div>
+
+                    	<div class="form-group">
+                      		<label for="lastname" class="col-md-3 control-label">Last Name</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="lastname" placeholder="Last Name">
+                          	</div>
+                   		</div>
+                   		
+                      	<div class="form-group">
+                        	<label for="password" class="col-md-3 control-label">Password</label>
+                          	<div class="col-md-9">
+                            	<input type="password" class="form-control" name="password" placeholder="Password">
+                        	</div>
+                      	</div>
+
+						<div class="form-group">
+							<div class="col-md-3"></div>
+                          	<div class="col-md-9">
+                    		<button type="submit" class="btn btn-primary">Save</button>
+                        	</div>
+						</div>
+
+                	</form>
+
+            	</div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+    </div>
+    <!-- /.container -->
+    
+    
+<!-- fileInput plugin-->
+<link href="@routes.Assets.at("stylesheets/fileinput.css")" media="all" rel="stylesheet" type="text/css" />
+<script src="@routes.Assets.at("javascripts/fileinput.js")" type="text/javascript"></script>
+
+<!-- file input styling -->
+<script>
+$("#image-input").fileinput({showUpload: false,
+	maxFileSize: 3000,
+	maxFileCount: 1,
+	allowedFileTypes: ["image"],
+	mainClass: "input-group"});
+</script>
+
+
+<!-- Sidebar script -->
+<script>
+$(function() {
+    $('#sidebar a').on('click', function() {
+        $('#'+$(this).data('id')).show().siblings('div').hide();
+    });
+});
+</script>
+}

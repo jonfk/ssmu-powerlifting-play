@@ -1,9 +1,10 @@
 @(menMeetRecords: List[SSMURecord],
 	womenMeetRecords: List[SSMURecord],
 	menTrainingRecords: List[SSMURecord],
-	womenTrainingRecords: List[SSMURecord])
+	womenTrainingRecords: List[SSMURecord],
+	loggedIn: Boolean = false, username: String = "")
 
-@main("SSMU Records") {
+@main("SSMU Records", loggedIn=loggedIn, username=username) {
     <!-- Page Content -->
     <div class="container">
 

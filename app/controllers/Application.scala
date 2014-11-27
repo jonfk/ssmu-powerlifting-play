@@ -11,15 +11,30 @@ import models.SSMUProfiles
 
 object Application extends Controller {
 
-	def index = Action {
-		Ok(views.html.index())
+	def index() = Action { implicit request =>
+	    val session = request.session
+		session.get("connected").map { user =>
+		    val username = session.get("username").get
+			Ok(views.html.index(loggedIn=true, username=username)).withSession(session)
+		}.getOrElse {
+			//Unauthorized("Oops, you are not connected")
+			Ok(views.html.index())
+		}
 	}
 
-	def about = DBAction { request =>
+	def about = DBAction { implicit request =>
 	    implicit val session = request.dbSession
 	    val team = SSMUProfiles.profiles.list
 	    println(team)
-		Ok(views.html.about(team))
+	    
+	    val playSession = request.session
+		playSession.get("connected").map { user =>
+		    val username = playSession.get("username").get
+			Ok(views.html.about(team, loggedIn=true, username=username)).withSession(playSession)
+		}.getOrElse {
+			//Unauthorized("Oops, you are not connected")
+			Ok(views.html.about(team))
+		}
 	}
 
 	def records = DBAction { implicit request =>
@@ -28,23 +43,19 @@ object Application extends Controller {
 	    val womenMeet = (for{record <- SSMURecords.records if record.gender === "female" && record.meet} yield record)
 	    val menTraining = (for{record <- SSMURecords.records if record.gender === "male" && !record.meet} yield record)
 	    val womenTraining = (for{record <- SSMURecords.records if record.gender === "female" && !record.meet} yield record)
-		Ok(views.html.records(menMeet.list, womenMeet.list, menTraining.list, womenTraining.list))
+
+	    val playSession = request.session
+		playSession.get("connected").map { user =>
+		    val username = playSession.get("username").get
+			Ok(views.html.records(menMeet.list, womenMeet.list, menTraining.list, womenTraining.list, loggedIn=true, username=username)).withSession(playSession)
+		}.getOrElse {
+			//Unauthorized("Oops, you are not connected")
+			Ok(views.html.records(menMeet.list, womenMeet.list, menTraining.list, womenTraining.list))
+		}
 	}
 	
-	def contact = Action {
-	    Ok(views.html.contact())
-	}
-
 	def notFound = Action { request =>
 		Ok(views.html.notFound(request.path))
 	}
 
-	/* Old stuff */
-	def oldindex = Action {
-		Ok(views.html.oldindex("Your new application is ready."))
-	}
-
-	def scaladoc = Action {
-		Ok(views.html.doc("Welcome to Play"))
-	}
 }

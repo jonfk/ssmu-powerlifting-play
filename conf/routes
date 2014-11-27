@@ -8,11 +8,15 @@ GET		/records					controllers.Application.records
 GET		/about						controllers.Application.about
 GET		/contact					controllers.Contact.contact
 POST	/contact					controllers.Contact.contactPost
+GET		/signin						controllers.Signin.signin
+POST	/signin						controllers.Signin.loginPost
+POST	/signup						controllers.Signin.signup
+GET		/logout						controllers.Signin.logout
+GET		/settings					controllers.Settings.settings
+POST	/settings/profile			controllers.Settings.profileUpdate
+POST	/settings/record			controllers.Settings.recordUpdate
+POST	/settings/user				controllers.Settings.userUpdate
 GET		/404						controllers.Application.notFound
-#Old stuff
-GET		/oldindex					controllers.Application.oldindex
-GET		/scaladoc					controllers.Application.scaladoc
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-GET		/favicon.png				controllers.Assets.at(path="/public/images", "favicon.png")

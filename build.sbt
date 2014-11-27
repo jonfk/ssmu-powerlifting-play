@@ -12,5 +12,7 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "com.typesafe.play" %% "play-slick" % "0.8.0",
-  "org.apache.commons" % "commons-email" % "1.3.3"
+  "org.apache.commons" % "commons-email" % "1.3.3",
+  "commons-validator" % "commons-validator" % "1.4.0",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )

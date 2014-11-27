@@ -1,4 +1,6 @@
-@main("SSMU Powerlifting") {
+@(loggedIn: Boolean = false, username: String = "")
+
+@main("SSMU Powerlifting", loggedIn = loggedIn, username = username) {
     <!-- Header Carousel -->
     <header id="myCarousel" class="carousel slide">
         <!-- Indicators -->
@@ -11,19 +13,19 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
             <div class="item active">
-                <div class="fill" style="background-image:url(@routes.Assets.at("images/Saguenay.jpg"));"></div>
+                <div class="fill" style="background-image:url(@routes.Assets.at("images/carousel/Saguenay.jpg"));"></div>
                 <div class="carousel-caption">
                     <h2>SSMU Powerlifting at Saguenay Open 2014</h2>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url(@routes.Assets.at("images/Napalm.jpg"));"></div>
+                <div class="fill" style="background-image:url(@routes.Assets.at("images/carousel/Napalm.jpg"));"></div>
                 <div class="carousel-caption">
                     <h2>SSMU Powerlifting at Napalm Classic 2014</h2>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url(@routes.Assets.at("images/Saguenay2.jpg"));"></div>
+                <div class="fill" style="background-image:url(@routes.Assets.at("images/carousel/Saguenay2.jpg"));"></div>
                 <div class="carousel-caption">
                     <h2>Medal Winners at Saguenay Open 2014</h2>
                 </div>

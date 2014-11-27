@@ -17,20 +17,33 @@ object Global extends GlobalSettings {
 
     override def onStart(app: Application) {
         Logger.info("Application has started")
-
-		//val ssmuRecords: TableQuery[SSMURecords] = TableQuery[SSMURecords]
+        
         try {
+        	play.api.db.slick.DB.withSession{ implicit session =>
+            	( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ).create
+        	}
+
+        	Users.populateInit
         	SSMURecords.populateInit
         	SSMUProfiles.populateInit
         } catch {
             case ex: JdbcSQLException =>
-                println("Database already populated")
-                //ex.printStackTrace()
+                println("Database already populated or tables already created")
+                ex.printStackTrace()
+            case e: Exception =>
+                println("Unknown Exception")
+                e.printStackTrace()
         }
     }
 
     override def onStop(app: Application) {
         Logger.info("Application shutdown...")
+        println("dropping databases")
+		play.api.db.slick.DB.withSession{ implicit session =>
+        	SSMURecords.records.ddl.drop
+        	SSMUProfiles.profiles.ddl.drop
+        	Users.users.ddl.drop
+        }
     }  
     
     override def onHandlerNotFound(request: RequestHeader) = {
