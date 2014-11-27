@@ -39,17 +39,16 @@ object Application extends Controller {
 
 	def records = DBAction { implicit request =>
 	    implicit val session = request.dbSession
-	    val menMeet = (for{record <- SSMURecords.records if record.gender === "male" && record.meet} yield record)
-	    val womenMeet = (for{record <- SSMURecords.records if record.gender === "female" && record.meet} yield record)
-	    val menTraining = (for{record <- SSMURecords.records if record.gender === "male" && !record.meet} yield record)
-	    val womenTraining = (for{record <- SSMURecords.records if record.gender === "female" && !record.meet} yield record)
+	    val menMeet = (for{record <- SSMURecords.records if record.gender === "male" && record.competition} yield record)
+	    val womenMeet = (for{record <- SSMURecords.records if record.gender === "female" && record.competition} yield record)
+	    val menTraining = (for{record <- SSMURecords.records if record.gender === "male" && !record.competition} yield record)
+	    val womenTraining = (for{record <- SSMURecords.records if record.gender === "female" && !record.competition} yield record)
 
 	    val playSession = request.session
 		playSession.get("connected").map { user =>
 		    val username = playSession.get("username").get
 			Ok(views.html.records(menMeet.list, womenMeet.list, menTraining.list, womenTraining.list, loggedIn=true, username=username)).withSession(playSession)
 		}.getOrElse {
-			//Unauthorized("Oops, you are not connected")
 			Ok(views.html.records(menMeet.list, womenMeet.list, menTraining.list, womenTraining.list))
 		}
 	}

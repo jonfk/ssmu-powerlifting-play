@@ -60,24 +60,24 @@ object Settings extends Controller {
 		    	// Create profile
 		        println("creating profile")
 		        SSMUProfiles.create(user.id.get,
-		                values.get("name").get,
-		                values.get("description").get,
+		                values("name"),
+		                values("description"),
 		                imageUrl,
-		                values.get("weightClass").get,
-		                values.get("facebook").get,
-		                values.get("youtube").get,
-		                values.get("instagram").get)
+		                values("weightClass"),
+		                values("facebook"),
+		                values("youtube"),
+		                values("instagram"))
 		    } else {
 		    	// Update profile
 		        println("updating profile")
 		        SSMUProfiles.updateProfile(user.id.get,
-		               values.get("name").get,
-		               values.get("description").get,
+		               values("name"),
+		               values("description"),
 		               imageUrl,
-		               values.get("weightClass").get,
-		               values.get("facebook").get,
-		               values.get("youtube").get,
-		               values.get("instagram").get)
+		               values("weightClass"),
+		               values("facebook"),
+		               values("youtube"),
+		               values("instagram"))
 		    }
 		    
 	        Redirect(routes.Settings.settings)
@@ -106,8 +106,9 @@ object Settings extends Controller {
 		    
 		    // Update values
 		    implicit val session = request.dbSession
+		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
 		    
-		    request.body.get("email").get.head match {
+		    values("email") match {
 		    	case "" =>
 		    		println("empty email; do nothing")
 		    	case email =>
@@ -115,7 +116,7 @@ object Settings extends Controller {
 		    		//val t = (for{u <- Users.users if u.id === user.id } yield u.email)
 		    		//println(t.invoker.list)
 		   	}
-		    request.body.get("username").get.head match {
+		    values("username") match {
 		    	case "" =>
 		    		println("empty username; do nothing")
 		    	case newUsername =>
@@ -123,7 +124,7 @@ object Settings extends Controller {
 		    		//val t = (for{u <- Users.users if u.id === user.id } yield u.username)
 		    		//println(t.invoker.list)
 		   	}
-		    request.body.get("firstname").get.head match {
+		    values("firstname") match {
 		    	case "" =>
 		    		println("empty firstname; do nothing")
 		    	case firstname =>
@@ -131,7 +132,7 @@ object Settings extends Controller {
 		    		//val t = (for{u <- Users.users if u.id === user.id } yield u.firstname)
 		    		//println(t.invoker.list)
 		   	}
-		    request.body.get("lastname").get.head match {
+		    values("lastname") match {
 		    	case "" =>
 		    		println("empty lastname; do nothing")
 		    	case lastname =>
@@ -139,7 +140,7 @@ object Settings extends Controller {
 		    		//val t = (for{u <- Users.users if u.id === user.id } yield u.lastname)
 		    		//println(t.invoker.list)
 		   	}
-		    request.body.get("password").get.head match {
+		    values("password") match {
 		    	case "" =>
 		    		println("empty password; do nothing")
 		    	case password =>
