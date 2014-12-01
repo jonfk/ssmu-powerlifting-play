@@ -18,6 +18,7 @@ POST	/settings/newrecord			controllers.Settings.recordNew
 POST	/settings/editrecord		controllers.Settings.recordUpdate
 POST	/settings/deleterecord		controllers.Settings.recordDelete
 POST	/settings/user				controllers.Settings.userUpdate
+GET		/profile/:username			controllers.Profiles.profile(username: String)
 GET		/404						controllers.Application.notFound
 
 # Map static resources from the /public folder to the /assets URL path

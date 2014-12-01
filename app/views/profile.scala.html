@@ -1,0 +1,110 @@
+@(user: User,
+profile: SSMUProfile,
+meetRecords: List[SSMURecord],
+trainingRecords: List[SSMURecord],
+loggedIn: Boolean = false, username:String = "")
+
+@main(user.username + "'s Profile", loggedIn=loggedIn, username=username) {
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">@user.username
+                    <small>Profile</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a>
+                    </li>
+                    <li class="active">Profile</li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Intro Content -->
+        <div class="row">
+            <div class="col-md-6">
+                <img class="img-responsive" src="@profile.imageUrl" alt="">
+            </div>
+            <div class="col-md-6">
+                <h3>@profile.name</h3>
+                <p>@profile.description</p>
+            </div>
+        </div>
+        <!-- /.row -->
+        
+        <div class="row">
+        	<div class="col-lg-12">
+        		<h2 class="page-header">Meet Records</h2>
+            	<div class="table-responsive">
+            		<table class="table table-striped table-bordered">
+            			<thead>
+            				<tr>
+            					<th>Lifter</th>
+            					<th>Weight Class</th>
+            					<th>Squat</th>
+            					<th>Bench</th>
+            					<th>Deadlift</th>
+            					<th>Total</th>
+            					<th>Wilks</th>
+            					<th>Date</th>
+            				</tr>
+            			</thead>
+            			<tbody>
+            					@for(record <- meetRecords) {
+            					<tr>
+									<td>@record.name</td>
+									<td>@record.weightClass</td>
+									<td>@record.squat</td>
+									<td>@record.bench</td>
+									<td>@record.deadlift</td>
+									<td>@record.total</td>
+									<td>@record.wilks</td>
+									<td>@record.date.toString</td>
+            					</tr>
+            					}
+            			</tbody>
+            		</table>
+            	</div>
+            	<!-- /.table -->
+
+        		<h2 class="page-header">Training Records</h2>
+            	<div class="table-responsive">
+            		<table class="table table-striped table-bordered">
+            			<thead>
+            				<tr>
+            					<th>Lifter</th>
+            					<th>Weight Class</th>
+            					<th>Squat</th>
+            					<th>Bench</th>
+            					<th>Deadlift</th>
+            					<th>Total</th>
+            					<th>Wilks</th>
+            					<th>Date</th>
+            				</tr>
+            			</thead>
+            			<tbody>
+            					@for(record <- trainingRecords) {
+            					<tr>
+									<td>@record.name</td>
+									<td>@record.weightClass</td>
+									<td>@record.squat</td>
+									<td>@record.bench</td>
+									<td>@record.deadlift</td>
+									<td>@record.total</td>
+									<td>@record.wilks</td>
+									<td>@record.date.toString</td>
+            					</tr>
+            					}
+            			</tbody>
+            		</table>
+            	</div>
+            	<!-- /.table -->
+
+        	</div>
+        </div>
+        <!-- /.row -->
+
+	</div>
+}
