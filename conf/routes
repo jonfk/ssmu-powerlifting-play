@@ -14,7 +14,9 @@ POST	/signup						controllers.Signin.signup
 GET		/logout						controllers.Signin.logout
 GET		/settings					controllers.Settings.settings
 POST	/settings/profile			controllers.Settings.profileUpdate
-POST	/settings/record			controllers.Settings.recordUpdate
+POST	/settings/newrecord			controllers.Settings.recordNew
+POST	/settings/editrecord		controllers.Settings.recordUpdate
+POST	/settings/deleterecord		controllers.Settings.recordDelete
 POST	/settings/user				controllers.Settings.userUpdate
 GET		/404						controllers.Application.notFound
 

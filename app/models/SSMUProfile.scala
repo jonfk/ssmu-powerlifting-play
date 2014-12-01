@@ -41,7 +41,7 @@ object SSMUProfiles {
 			        SSMUProfile(None, 1,
 			                "Jonathan Fok kan", 
 			                """Jonathan is a Software Engineer who likes to lift things up and put them down""",
-			                "http://placehold.it/750x450",
+			                "http://placehold.it/250x250",
 			                "-66kg",
 			                "https://www.facebook.com/jon.fokkan",
 			                "https://www.youtube.com/user/jonesdoe1",

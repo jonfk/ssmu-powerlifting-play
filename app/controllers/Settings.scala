@@ -22,12 +22,13 @@ object Settings extends Controller {
 		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
 		    //println("user id : " + user.id)
 		    //println(SSMUProfiles.profiles.list)
+		    val records = (for{r <- SSMURecords.records if r.userId === user.id} yield r).list
 		    if(SSMUProfiles.exists(user.id.get)) {
 		        val profile = SSMUProfiles.getProfile(user.id.get)
 
-		    	Ok(views.html.userSettings(user, Some(profile))).withSession(playSession)
+		    	Ok(views.html.userSettings(user, Some(profile), records)).withSession(playSession)
 		    } else {
-		    	Ok(views.html.userSettings(user, None)).withSession(playSession)
+		    	Ok(views.html.userSettings(user, None, records)).withSession(playSession)
 		    }
 	    }.getOrElse{
 			Unauthorized("Oops, you are not connected")
@@ -86,11 +87,129 @@ object Settings extends Controller {
 	    }
 	}
 	
-	def recordUpdate = Action { request =>
+	def validateRecordForm(values : Map[String,String]) = {
+	}
+	
+	def recordUpdate = DBAction(parse.urlFormEncoded) { implicit request =>
 	    println("record update")
 	    println(request.body)
-	    Ok("recordUpdate received")
 	    
+	    implicit val session = request.dbSession
+
+	    val playSession = request.session
+		playSession.get("connected").map { user =>
+		   	val username = playSession.get("username").get
+		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
+		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
+		   	
+		   	if(!SSMURecords.belongs(values("id").toInt, user.id.get)) {
+		   		Unauthorized("Unauthorized modification of record. Record does not belong to user")
+		   	}
+
+		   	val competition = values("context") == "competition"
+		   	val doubleValues : Either[Tuple5[Double, Double, Double, Double, Double], Result] = try{
+		   		Left(values("squat").toDouble,
+		   		values("bench").toDouble,
+		   		values("deadlift").toDouble,
+		   		values("total").toDouble,
+		   		values("wilks").toDouble)
+		   	} catch {
+		   		case ex: NumberFormatException => 
+		   		    println("invalid input for squat, bench, deadlift, total or wilks")
+		   		    Right(BadRequest("invalid input for squat, bench, deadlift, total or wilks"))
+		   		case ex: Exception =>
+		   		    ex.printStackTrace()
+		   		    Right(BadRequest("Unknown internal server error"))
+		   	}
+		   	
+		   	if(doubleValues.isRight) {
+		   	    doubleValues.right.get
+		   	} else {
+		   	    val (squat, bench, deadlift, total, wilks) = doubleValues.left.get
+		   		SSMURecords.updateRecord(values("id").toInt,
+		   	        values("weightClass"),
+		   	        values("sex"),
+		   	        squat,
+		   	        bench,
+		   	        deadlift,
+		   	        total,
+		   	        wilks,
+		   	        values("date"),
+		   	        competition)
+		   	
+		   	    Redirect(routes.Settings.settings)
+		   	}
+	    }.getOrElse{
+			Unauthorized("Oops, you are not connected")
+	    }
+	}
+	
+	def recordNew = DBAction(parse.urlFormEncoded){ implicit request =>
+	    println("new record")
+	    println(request.body)
+	    Ok("test")
+
+	    implicit val session = request.dbSession
+
+	    val playSession = request.session
+		playSession.get("connected").map { user =>
+		   	val username = playSession.get("username").get
+		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
+		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
+
+		   	if(!SSMURecords.belongs(values("id").toInt, user.id.get)) {
+		   		Unauthorized("Unauthorized modification of record. Record does not belong to user")
+		   	}
+
+		   	val competition = values("context") == "competition"
+		   	val doubleValues : Either[Tuple5[Double, Double, Double, Double, Double], Result] = try{
+		   		Left(values("squat").toDouble,
+		   		values("bench").toDouble,
+		   		values("deadlift").toDouble,
+		   		values("total").toDouble,
+		   		values("wilks").toDouble)
+		   	} catch {
+		   		case ex: NumberFormatException => 
+		   		    println("invalid input for squat, bench, deadlift, total or wilks")
+		   		    Right(BadRequest("invalid input for squat, bench, deadlift, total or wilks"))
+		   		case ex: Exception =>
+		   		    ex.printStackTrace()
+		   		    Right(BadRequest("Unknown internal server error"))
+		   	}
+		   	
+		   	if(doubleValues.isRight) {
+		   	    doubleValues.right.get
+		   	} else {
+		   	    val (squat, bench, deadlift, total, wilks) = doubleValues.left.get
+		   	    val name = if(user.firstname == "") user.username else user.firstname + " " + user.lastname
+		   	    SSMURecords.create(user.id.get, name, values("weightClass"), values("sex"), squat, bench, deadlift, total, wilks, values("date"), competition)
+		   	
+		   	    Redirect(routes.Settings.settings)
+		   	}
+	    }.getOrElse{
+			Unauthorized("Oops, you are not connected")
+	    }
+	}
+	
+	def recordDelete = DBAction(parse.urlFormEncoded){ implicit request =>
+	    implicit val session = request.dbSession
+
+	    val playSession = request.session
+		playSession.get("connected").map { user =>
+		   	val username = playSession.get("username").get
+		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
+		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
+		   	
+		   	if(!SSMURecords.belongs(values("id").toInt, user.id.get)) {
+		   		Unauthorized("Unauthorized modification of record. Record does not belong to user")
+		   	} else {
+		   	    SSMURecords.delete(values("id").toInt)
+		   	}
+
+		   	Redirect(routes.Settings.settings)
+	    }.getOrElse{
+			Unauthorized("Oops, you are not connected")
+	    }
 	}
 
 	def userUpdate = DBAction(parse.urlFormEncoded) { implicit request =>

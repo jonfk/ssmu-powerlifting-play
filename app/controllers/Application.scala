@@ -39,10 +39,10 @@ object Application extends Controller {
 
 	def records = DBAction { implicit request =>
 	    implicit val session = request.dbSession
-	    val menMeet = (for{record <- SSMURecords.records if record.gender === "male" && record.competition} yield record)
-	    val womenMeet = (for{record <- SSMURecords.records if record.gender === "female" && record.competition} yield record)
-	    val menTraining = (for{record <- SSMURecords.records if record.gender === "male" && !record.competition} yield record)
-	    val womenTraining = (for{record <- SSMURecords.records if record.gender === "female" && !record.competition} yield record)
+	    val menMeet = (for{record <- SSMURecords.records if record.sex === "male" && record.competition} yield record)
+	    val womenMeet = (for{record <- SSMURecords.records if record.sex === "female" && record.competition} yield record)
+	    val menTraining = (for{record <- SSMURecords.records if record.sex === "male" && !record.competition} yield record)
+	    val womenTraining = (for{record <- SSMURecords.records if record.sex === "female" && !record.competition} yield record)
 
 	    val playSession = request.session
 		playSession.get("connected").map { user =>
