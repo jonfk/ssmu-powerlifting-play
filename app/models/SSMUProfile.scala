@@ -133,4 +133,13 @@ object SSMUProfiles {
     	q.update(instagram)
     	q.invoker.execute
 	}
+	
+	def deleteImageFile(userId: Int)(implicit session: Session) {
+	    val p = (for{p <- profiles if p.userId === userId} yield p).list.head
+	    if(p.imageUrl != current.configuration.getString("image.default.url").get) {
+		   	import java.io.File
+	    	val filename = p.imageUrl.replaceFirst("/assets/images/profiles/", "")
+	    	(new File(s"public/images/profiles/$filename")).delete()
+	    }
+	}
 }

@@ -2,13 +2,15 @@ import play.api._
 import play.api.db._
 import play.api.Play.current
 import models.SSMURecord
-import play.api.db.slick.Config.driver.simple._
 import models.SSMURecords
+import play.api.db.slick.Config.driver.simple._
 import play.api.mvc.Results._
 import scala.concurrent.Future
 import play.api.mvc.RequestHeader
 import org.h2.jdbc.JdbcSQLException
 import models._
+import java.io.PrintWriter
+import java.io.File
 
 
 
@@ -20,12 +22,20 @@ object Global extends GlobalSettings {
         
         try {
         	play.api.db.slick.DB.withSession{ implicit session =>
-            	( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ).create
+        	    // write create statements to file
+        	    val writer = new PrintWriter(new File("SQL/create.sql" ))
+            	val stmts = ( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ++ NewsItems.news.ddl ).createStatements.mkString(";\n")
+            	writer.write(stmts)
+        	    writer.close
+        	    // Disable for live run
+        	    println("creating tables")
+            	( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ++ NewsItems.news.ddl ).create
         	}
 
         	Users.populateInit
         	SSMURecords.populateInit
         	SSMUProfiles.populateInit
+        	NewsItems.populateInit
         } catch {
             case ex: JdbcSQLException =>
                 println("Database already populated or tables already created")
@@ -38,11 +48,15 @@ object Global extends GlobalSettings {
 
     override def onStop(app: Application) {
         Logger.info("Application shutdown...")
-        println("dropping databases")
 		play.api.db.slick.DB.withSession{ implicit session =>
-        	SSMURecords.records.ddl.drop
-        	SSMUProfiles.profiles.ddl.drop
-        	Users.users.ddl.drop
+		    // write drop statements to file
+        	val writer = new PrintWriter(new File("SQL/drop.sql" ))
+        	val stmts = (SSMURecords.records.ddl ++ SSMUProfiles.profiles.ddl ++ Users.users.ddl ++ NewsItems.news.ddl ).dropStatements.mkString(";\n")
+        	writer.write(stmts)
+        	writer.close
+        	// disable for live run
+        	println("dropping databases")
+        	(SSMURecords.records.ddl ++ SSMUProfiles.profiles.ddl ++ Users.users.ddl ++ NewsItems.news.ddl ).drop
         }
     }  
     

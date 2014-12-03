@@ -53,10 +53,35 @@ object Signin extends Controller {
 	def logout = Action {
 	        Redirect(routes.Application.index()).withNewSession
 	}
+
+	val signupForm = Form(
+			tuple(
+					"email" -> text,
+					"username" -> text,
+					"firstname" -> text,
+					"lastname" -> text,
+					"passwd" -> text,
+					"icode" -> text
+					)
+			)
 	
-	def signup = Action { request =>
+	def signup = DBAction { implicit request =>
 	    println("Received signup request")
 	    println(request.body)
-	    Ok("signup received. But not implemented yet. Please come back soon")
+	    
+	    implicit val session = request.dbSession
+
+	    val (email, username, firstname, lastname, password, invitecode) = signupForm.bindFromRequest.get
+	    
+	    if(invitecode == "iwantadmin") {
+	        Users.addUser(email, username, firstname, lastname, password, power="admin")
+	    	Ok(views.html.signin(success=Some("You are now added as an admin user")))
+	    } else if(invitecode == "agentvalentine") {
+	        Users.addUser(email, username, firstname, lastname, password)
+	    	Ok(views.html.signin(success=Some("You are now added as a user")))
+	    } else {
+	    	Ok(views.html.signin(error=Some("sorry unauthorized to create an account. Contact administrator to verify you should have access to this feature")))
+	    }
+
 	}
 }

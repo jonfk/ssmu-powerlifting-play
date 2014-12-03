@@ -8,7 +8,9 @@ import org.apache.commons.validator.routines.EmailValidator
 
 case class User(id: Option[Int], email: String, username: String,
         firstname: String, lastname: String,
-        password: String)
+        password: String,
+        power: String = "normal"
+        )
 
 /*
  * Constraints:
@@ -22,8 +24,9 @@ class Users(tag: Tag) extends Table[User](tag, "SSMU_USERS") {
 	def firstname = column[String]("FIRSTNAME", O.Nullable)
 	def lastname = column[String]("LASTNAME", O.Nullable)
 	def password = column[String]("PASSWORD", O.NotNull)
+	def power = column[String]("POWER", O.NotNull)
 
-	def * = (id.?, email, username, firstname, lastname, password) <> ((User.apply _).tupled, User.unapply)
+	def * = (id.?, email, username, firstname, lastname, password, power) <> ((User.apply _).tupled, User.unapply)
 }
 
 object Users {
@@ -32,20 +35,25 @@ object Users {
 	def populateInit() {
 		play.api.db.slick.DB.withSession{ implicit session =>
 			val initUsers = List(
-			        create("jonesdoe2@gmail.com", "jfk", "Jonathan", "Fok kan", "1234"),
-			        create("j@yahoo.com", "jake", "Jake", "Shamash", "9999")
+			        create("jonesdoe2@gmail.com", "jfk", "Jonathan", "Fok kan", "1234", "admin"),
+			        create("testuser@gmail.com", "test", "test", "user", "9999")
 				)
 			for(user <- initUsers) {
 				val userId = (users returning users.map(_.id)) += user
-				println(userId)
 			}
 		}
 	}
 
     def create(email: String, username: String,
-            firstname: String, lastname: String, password: String) = {
+            firstname: String, lastname: String, password: String, power: String = "normal") = {
         val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
-        User(None, email, username, firstname, lastname, hashedPassword)
+        User(None, email, username, firstname, lastname, hashedPassword, power=power)
+    }
+    
+    def addUser(email: String, username: String,
+            firstname: String, lastname: String, password: String, power: String = "normal")(implicit session: Session): Int = {
+        val user = create(email, username, firstname, lastname, password, power = power)
+		(users returning users.map(_.id)) += user
     }
 
     def authenticateUsername(username: String, password: String) : Boolean = {

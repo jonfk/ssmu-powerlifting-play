@@ -180,7 +180,7 @@ object SSMURecords {
 object HtmlDateToSqlDate {
     implicit def htmlDateToSqlDate(htmlDate: String) : Date = {
 	    val format = new SimpleDateFormat("yyyy-MM-dd")
-	    val date = format.parse("2013-01-28")
+	    val date = format.parse(htmlDate)
 	    val sqlDate = new Date(date.getTime()) 
 	    sqlDate
     }

@@ -1,10 +1,6 @@
 @(user: User, optProfile: Option[SSMUProfile], records : List[SSMURecord])
 
-@main("User Settings", loggedIn=true, username=user.username,
-javascript=Html(
-"""
-"""
-)){
+@main("User Settings", loggedIn=true, username=user.username){
     <!-- Page Content -->
     <div class="container">
 

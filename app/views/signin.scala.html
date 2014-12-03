@@ -1,5 +1,40 @@
+@(error: Option[String]=None, success: Option[String]=None)
+
 @main("Sign in to SSMU Powerlifting") {
     <div class="container">    
+
+	@if(error != None){
+		<br>
+		<div class="row">
+			<div class=col-md-3></div>
+			<div class=col-md-6>
+				<div class="alert alert-danger" role="alert">
+  					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  					<span class="sr-only">Error:</span>
+  					@error.get
+				</div>
+			</div>
+			<div class=col-md-3></div>
+		</div>
+		<!-- /.error message -->
+	}
+
+	@if(success != None){
+		<br>
+		<div class="row">
+			<div class=col-md-3></div>
+			<div class=col-md-6>
+				<div class="alert alert-success" role="alert">
+  					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+  					<span class="sr-only">Success:</span>
+  					@success.get
+				</div>
+			</div>
+			<div class=col-md-3></div>
+		</div>
+		<!-- /.error message -->
+	}
+
         <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
             <div class="panel panel-info" >
                     <div class="panel-heading">

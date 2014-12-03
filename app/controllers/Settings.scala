@@ -50,9 +50,10 @@ object Settings extends Controller {
 		    val imageUrl : String = 
 		        request.body.file("image").map{ image =>
 		   	    	import java.io.File
-		   	    	val filename = username +"-"+ image.filename
+		   	    	val extension = image.contentType.map(imagetype => imagetype.split("/").last).getOrElse("jpg")
+		   	    	val filename = username +"."+ extension
 		   	    	val path = s"public/images/profiles/$filename"
-		   	    	val url = s"assets/images/profiles/$filename"
+		   	    	val url = s"/assets/images/profiles/$filename"
 		   	    	image.ref.moveTo(new File(path), true)
 		   	    	url
 		   	}.getOrElse(Play.current.configuration.getString("image.default.url").get)
@@ -71,6 +72,7 @@ object Settings extends Controller {
 		    } else {
 		    	// Update profile
 		        println("updating profile")
+		        SSMUProfiles.deleteImageFile(user.id.get)
 		        SSMUProfiles.updateProfile(user.id.get,
 		               values("name"),
 		               values("description"),
@@ -85,9 +87,6 @@ object Settings extends Controller {
 	    }.getOrElse{
 			Unauthorized("Oops, you are not connected")
 	    }
-	}
-	
-	def validateRecordForm(values : Map[String,String]) = {
 	}
 	
 	def recordUpdate = DBAction(parse.urlFormEncoded) { implicit request =>

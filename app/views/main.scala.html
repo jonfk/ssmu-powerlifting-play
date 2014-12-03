@@ -1,4 +1,4 @@
-@(title: String, loggedIn: Boolean = false, username: String = "", javascript: Html = Html(""))(content: Html)
+@(title: String, loggedIn: Boolean = false, username: String = "")(content: Html)
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,8 +35,6 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     
-    @javascript
-
 </head>
 
 <body>
@@ -89,8 +87,9 @@
         </div>
         <!-- /.container -->
     </nav>
-
+	
 	@content
+
 	<div class="container">
         <!-- Footer -->
         <footer>

@@ -1,13 +1,6 @@
 @(loggedIn: Boolean=false, username: String = "")
 
-@main("Contact us", loggedIn=loggedIn, username=username,
-javascript=Html(
-"""
-	<!-- Contact Form JavaScript -->
-    <!-- Do not edit these files! In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
-    <script src="assets/javascripts/jqBootstrapValidation.js"></script>
-    <script src="assets/javascripts/contact_me.js"></script>
-""")) {
+@main("Contact us", loggedIn=loggedIn, username=username) {
     <!-- Page Content -->
     <div class="container">
 
@@ -96,5 +89,9 @@ javascript=Html(
     </div>
     <!-- /.container -->
 
+	<!-- Contact Form JavaScript -->
+    <!-- Do not edit these files! In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
+    <script src="assets/javascripts/jqBootstrapValidation.js"></script>
+    <script src="assets/javascripts/contact_me.js"></script>
     
 }

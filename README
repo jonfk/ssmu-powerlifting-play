@@ -9,3 +9,11 @@ Ideas
 - Badge system for personal bests, overall best, etc
 - Workout tracking?
 - Personal profile pages
+
+Setting up the postgresql server:
+-Install Postgres
+sudo apt-get install postgresql postgresql-contrib
+-Set user for postgres
+sudo -u postgres psql postgres
+-Set password for postgres user
+\password postgres

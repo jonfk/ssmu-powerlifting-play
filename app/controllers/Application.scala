@@ -8,17 +8,22 @@ import models.SSMURecords
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DBAction
 import models.SSMUProfiles
+import models.NewsItems
 
 object Application extends Controller {
 
-	def index() = Action { implicit request =>
-	    val session = request.session
-		session.get("connected").map { user =>
-		    val username = session.get("username").get
-			Ok(views.html.index(loggedIn=true, username=username)).withSession(session)
+	def index() = DBAction { implicit request =>
+	    implicit val session = request.dbSession
+	    
+	    val news = NewsItems.getNews()
+
+	    val playSession = request.session
+		playSession.get("connected").map { user =>
+		    val username = playSession.get("username").get
+			Ok(views.html.index(news, loggedIn=true, username=username)).withSession(playSession)
 		}.getOrElse {
 			//Unauthorized("Oops, you are not connected")
-			Ok(views.html.index())
+			Ok(views.html.index(news))
 		}
 	}
 
