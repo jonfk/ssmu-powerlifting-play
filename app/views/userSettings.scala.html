@@ -71,7 +71,26 @@
                     	<div class="form-group">
                       		<label for="weightClass" class="col-md-3 control-label">Weight Class</label>
                          	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="weightClass" placeholder="Weight Class (e.g -83kg)" value="@profile.weightClass">
+                         		<select name="weightClass" class="form-control">
+                         			<Option selected="selected" value="@profile.weightClass">@profile.weightClass</Option>
+                         			@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg").filter(_ !=profile.weightClass)) {
+                         			<Option value="@weight">@weight</Option>
+                         			}
+                         		</select>
+                         		<!--
+                         		<select name="weightClass" class="form-control">
+                         			<Option value="">None</Option>
+                         			<Option value="-53kg">-53kg</Option>
+                         			<Option value="-59kg">-59kg</Option>
+                         			<Option value="-66kg">-66kg</Option>
+                         			<Option value="-74kg">-74kg</Option>
+                         			<Option value="-83kg">-83kg</Option>
+                         			<Option value="-93kg">-93kg</Option>
+                         			<Option value="-105kg">-105kg</Option>
+                         			<Option value="-120kg">-120kg</Option>
+                         			<Option value="+120kg">+120kg</Option>
+                         		</select>
+                         		-->
                           	</div>
                    		</div>
                    		
@@ -173,7 +192,7 @@
                     		<div class="form-group">
                       			<label for="Sex" class="col-md-3 control-label">Sex</label>
                          		<div class="col-md-9">
-                         			<select name="sex">
+                         			<select name="sex" class="form-control">
                          				<Option value="male">Male</Option>
                          				<Option value="female">Female</Option>
                          			</select>
@@ -184,6 +203,12 @@
                       			<label for="Weight Class" class="col-md-3 control-label">Weight Class</label>
                          		<div class="col-md-9">
                          			<input type="text" class="form-control" name="weightClass" placeholder="Weight Class e.g: -83kg" value="@record.weightClass">
+                         			<select name="weightClass" class="form-control">
+                         				<Option selected="selected" value="@record.weightClass">@record.weightClass</Option>
+                         				@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg").filter(_ !=record.weightClass)) {
+                         				<Option value="@weight">@weight</Option>
+                         				}
+                         			</select>
                           		</div>
                    			</div>
 
@@ -232,7 +257,7 @@
                     		<div class="form-group">
                       			<label for="Context" class="col-md-3 control-label">Context</label>
                          		<div class="col-md-9">
-                         			<select name="context">
+                         			<select name="context" class="form-control">
                          				<Option value="competition">Competition</Option>
                          				<Option value="training">Training</Option>
                          			</select>
@@ -265,7 +290,7 @@
                     	<div class="form-group">
                       		<label for="Sex" class="col-md-3 control-label">Sex</label>
                          	<div class="col-md-9">
-                         		<select name="sex">
+                         		<select name="sex" class="form-control">
                          			<Option value="male">Male</Option>
                          			<Option value="female">Female</Option>
                          		</select>
@@ -275,7 +300,18 @@
                     	<div class="form-group">
                       		<label for="Weight Class" class="col-md-3 control-label">Weight Class</label>
                          	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="weightClass" placeholder="Weight Class e.g: -83kg">
+                         		<select name="weightClass" class="form-control">
+                         			<Option value="">None</Option>
+                         			<Option value="-53kg">-53kg</Option>
+                         			<Option value="-59kg">-59kg</Option>
+                         			<Option value="-66kg">-66kg</Option>
+                         			<Option value="-74kg">-74kg</Option>
+                         			<Option value="-83kg">-83kg</Option>
+                         			<Option value="-93kg">-93kg</Option>
+                         			<Option value="-105kg">-105kg</Option>
+                         			<Option value="-120kg">-120kg</Option>
+                         			<Option value="+120kg">+120kg</Option>
+                         		</select>
                           	</div>
                    		</div>
 
@@ -324,7 +360,7 @@
                     	<div class="form-group">
                       		<label for="Context" class="col-md-3 control-label">Context</label>
                          	<div class="col-md-9">
-                         		<select name="context">
+                         		<select name="context" class="form-control">
                          			<Option value="competition">Competition</Option>
                          			<Option value="training">Training</Option>
                          		</select>
