@@ -13,15 +13,21 @@ Ideas
 ###Setting up the postgresql server:
 -Install Postgres
     +```sudo apt-get install postgresql postgresql-contrib```
+
 -Set user for postgres
     +```sudo -u postgres psql postgres```
+
 -Set password for postgres user
     +```\password postgres```
+
 -edit the pg_hba.conf file
     +```find / -name "pg_hba.conf"```
+
 -change peer to md5
+
 -create database
     +```CREATE DATABASE ssmu-powerlifting```
+
 -create tables
     +```psql -U postgres -d ssmupowerlifting -a -f SQL/create.sql```
 
