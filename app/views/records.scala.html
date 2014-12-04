@@ -2,6 +2,10 @@
 	womenMeetRecords: List[SSMURecord],
 	menTrainingRecords: List[SSMURecord],
 	womenTrainingRecords: List[SSMURecord],
+	mmrUsers: List[User],
+	wmrUsers: List[User],
+	mtrUsers: List[User],
+	wtrUsers: List[User],
 	loggedIn: Boolean = false, username: String = "")
 
 @main("SSMU Records", loggedIn=loggedIn, username=username) {
@@ -43,9 +47,9 @@
             				</tr>
             			</thead>
             			<tbody>
-            					@for(record <- menMeetRecords) {
+            					@for((record,user) <- menMeetRecords.zip(mmrUsers)) {
             					<tr>
-									<td>@record.name</td>
+									<td><a href="/profile/@user.username">@record.name</a></td>
 									<td>@record.weightClass</td>
 									<td>@record.squat</td>
 									<td>@record.bench</td>
@@ -76,9 +80,9 @@
             				</tr>
             			</thead>
             			<tbody>
-            					@for(record <- womenMeetRecords) {
+            					@for((record,user) <- womenMeetRecords.zip(wmrUsers)) {
             					<tr>
-									<td>@record.name</td>
+									<td><a href="/profile/@user.username">@record.name</a></td>
 									<td>@record.weightClass</td>
 									<td>@record.squat</td>
 									<td>@record.bench</td>
@@ -118,9 +122,9 @@
             				</tr>
             			</thead>
             			<tbody>
-            					@for(record <- menTrainingRecords) {
+            					@for((record,user) <- menTrainingRecords.zip(mtrUsers)) {
             					<tr>
-									<td>@record.name</td>
+									<td><a href="/profile/@user.username">@record.name</a></td>
 									<td>@record.weightClass</td>
 									<td>@record.squat</td>
 									<td>@record.bench</td>
@@ -151,9 +155,9 @@
             				</tr>
             			</thead>
             			<tbody>
-            					@for(record <- womenTrainingRecords) {
+            					@for((record,user) <- womenTrainingRecords.zip(wtrUsers)) {
             					<tr>
-									<td>@record.name</td>
+									<td><a href="/profile/@user.username">@record.name</a></td>
 									<td>@record.weightClass</td>
 									<td>@record.squat</td>
 									<td>@record.bench</td>

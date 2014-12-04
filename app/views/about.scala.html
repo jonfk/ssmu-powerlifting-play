@@ -1,4 +1,4 @@
-@(team: List[SSMUProfile], loggedIn: Boolean = false, username:String = "")
+@(team: List[SSMUProfile], teamUsers: List[User], loggedIn: Boolean = false, username:String = "")
 
 @main("About", loggedIn=loggedIn, username=username) {
     <!-- Page Content -->
@@ -39,7 +39,7 @@
                 <h2 class="page-header">Meet the Team</h2>
             </div>
             
-            <!-- Example -->
+            <!-- Example
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
                     <img class="img-responsive" src="http://placehold.it/750x450" alt="">
@@ -59,23 +59,30 @@
                     </div>
                 </div>
             </div>
+            -->
             
-            @for(member <- team) {
+            @for((member,user) <- team.zip(teamUsers)) {
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
                     <img class="img-responsive" src="@member.imageUrl" alt="" style="">
                     <div class="caption">
-                        <h3>@member.name<br>
+                        <h3><a href="/profile/@user.username">@member.name</a><br>
                             <small>@member.weightClass</small>
                         </h3>
                         <p>@member.description</p>
                         <ul class="list-inline">
+                        	@if(member.facebook != ""){
                             <li><a href="@member.facebook"><i class="fa fa-2x fa-facebook-square"></i></a>
                             </li>
+                        	}
+                        	@if(member.youtube != ""){
                             <li><a href="@member.youtube"><i class="fa fa-2x fa-youtube-square"></i></a>
                             </li>
+                            }
+                            @if(member.instagram != "") {
                             <li><a href="@member.instagram"><i class="fa fa-2x fa-instagram"></i></a>
                             </li>
+                            }
                         </ul>
                     </div>
                 </div>
