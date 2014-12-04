@@ -52,8 +52,8 @@ object Settings extends Controller {
 		   	    	import java.io.File
 		   	    	val extension = image.contentType.map(imagetype => imagetype.split("/").last).getOrElse("jpg")
 		   	    	val filename = username +"."+ extension
-		   	    	val path = s"public/images/profiles/$filename"
-		   	    	val url = s"/assets/images/profiles/$filename"
+		   	    	val path = s"images/profiles/$filename"
+		   	    	val url = s"/profiles/images/$filename"
 		   	    	image.ref.moveTo(new File(path), true)
 		   	    	url
 		   	}.getOrElse(Play.current.configuration.getString("image.default.url").get)
