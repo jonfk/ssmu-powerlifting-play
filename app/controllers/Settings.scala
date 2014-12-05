@@ -156,10 +156,6 @@ object Settings extends Controller {
 		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
 		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
 
-		   	if(!SSMURecords.belongs(values("id").toInt, user.id.get)) {
-		   		Unauthorized("Unauthorized modification of record. Record does not belong to user")
-		   	}
-
 		   	val competition = values("context") == "competition"
 		   	val doubleValues : Either[Tuple5[Double, Double, Double, Double, Double], Result] = try{
 		   		Left(values("squat").toDouble,

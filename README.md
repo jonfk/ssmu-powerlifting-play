@@ -11,41 +11,41 @@ Ideas
 ##TODO before serving to public:
 
 ###Setting up the postgresql server:
--Install Postgres
+Install Postgres
 
-    +```sudo apt-get install postgresql postgresql-contrib```
+    sudo apt-get install postgresql postgresql-contrib
 
--Set user for postgres
+Set user for postgres
 
-    +```sudo -u postgres psql postgres```
+    sudo -u postgres psql postgres
 
--Set password for postgres user
+Set password for postgres user
 
-    +```\password postgres```
+    \password postgres
 
--edit the pg_hba.conf file
+Edit the pg_hba.conf file
 
-    +```find / -name "pg_hba.conf"```
+    find / -name "pg_hba.conf"
 
--change peer to md5
+Change peer to md5
 
--create database
+Create database
 
-    +```CREATE DATABASE ssmu-powerlifting```
+    CREATE DATABASE ssmu-powerlifting
 
--create tables
+Create tables
 
-    +```psql -U postgres -d ssmupowerlifting -a -f SQL/create.sql```
+    psql -U postgres -d ssmupowerlifting -a -f SQL/create.sql
 
 ###Before live run
--change application secret
--change database and database username and password
+- change application secret
+- change database and database username and password
 
 ###Compile for live run
-```sbt dist```
+    sbt dist
 
 ###In unzipped directory of program
-```mkdir -p images/profiles SQL```
+    mkdir -p images/profiles SQL
 
 ###Run command
-```./bin/ssmu-powerlifting -Dhttp.port=1234```
+    ./bin/ssmu-powerlifting -Dhttp.port=1234
