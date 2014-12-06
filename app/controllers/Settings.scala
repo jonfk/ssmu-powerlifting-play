@@ -157,9 +157,21 @@ object Settings extends Controller {
 		   	if(doubleValues.isRight) {
 		   	    doubleValues.right.get
 		   	} else {
-		   	    val (bodyweight, squat, bench, deadlift, wilks) = doubleValues.left.get
+		   	    // TODO
+		   	    val (bodyweight, squat, bench, deadlift, wilks) = if(recordData.unit == "lbs") {
+		   	    	val (bodyweight, squat, bench, deadlift, wilks) = doubleValues.left.get
+		   	    	(
+		   	    	        SSMURecords.lbsToKg(bodyweight),
+		   	    	        SSMURecords.lbsToKg(squat),
+		   	    	        SSMURecords.lbsToKg(bench),
+		   	    	        SSMURecords.lbsToKg(deadlift),
+		   	    	        SSMURecords.lbsToKg(wilks)
+		   	    	)
+		   	    } else doubleValues.left.get
+
 		   	    val fWilks = if(wilks == 0 && bodyweight != 0) SSMURecords.calculateWilks(squat, bench, deadlift, bodyweight, recordData.sex == "male") else wilks
 		   	    val total = squat + bench + deadlift
+
 		   		SSMURecords.updateRecord(recordData.id.get.toInt,
 		   	        recordData.weightClass,
 		   	        recordData.sex,
@@ -213,7 +225,17 @@ object Settings extends Controller {
 		   	if(doubleValues.isRight) {
 		   	    doubleValues.right.get
 		   	} else {
-		   	    val (bodyweight, squat, bench, deadlift, wilks) = doubleValues.left.get
+		   	    // TODO
+		   	    val (bodyweight, squat, bench, deadlift, wilks) = if(recordData.unit == "lbs") {
+		   	    	val (bodyweight, squat, bench, deadlift, wilks) = doubleValues.left.get
+		   	    	(
+		   	    	        SSMURecords.lbsToKg(bodyweight),
+		   	    	        SSMURecords.lbsToKg(squat),
+		   	    	        SSMURecords.lbsToKg(bench),
+		   	    	        SSMURecords.lbsToKg(deadlift),
+		   	    	        SSMURecords.lbsToKg(wilks)
+		   	    	)
+		   	    } else doubleValues.left.get
 		   	    val fWilks = if(wilks == 0 && bodyweight != 0) SSMURecords.calculateWilks(squat, bench, deadlift, bodyweight, recordData.sex == "male") else wilks
 		   	    val total = squat + bench + deadlift
 		   	    val name = if(user.firstname == "") user.username else user.firstname + " " + user.lastname
