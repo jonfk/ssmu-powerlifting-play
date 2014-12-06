@@ -10,29 +10,34 @@ case class SSMURecord(id: Option[Int],
         name: String,
         weightClass: String,
         sex: String,
+        bodyweight: Double,
         squat: Double,
         bench: Double,
         deadlift: Double,
         total: Double,
         wilks: Double,
-        date: Date,
+        date: Option[Date],
         competition: Boolean)
         
+/*
+ * All weights are stored in KG
+ * */
 class SSMURecords(tag: Tag) extends Table[SSMURecord](tag, "SSMU_RECORDS") {
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
     def userId = column[Int]("USER_ID")
     def name = column[String]("NAME")
     def weightClass = column[String]("WEIGHT_CLASS", O.NotNull)
     def sex = column[String]("SEX", O.NotNull)
+    def bodyweight = column[Double]("BODYWEIGHT")
     def squat = column[Double]("SQUAT")
     def bench = column[Double]("BENCH")
     def deadlift = column[Double]("DEADLIFT")
     def total = column[Double]("TOTAL")
     def wilks = column[Double]("WILKS")
-    def date = column[Date]("DATE")
+    def date = column[Option[Date]]("DATE")
     def competition = column[Boolean]("COMPETITION")
 
-    def * = (id.?, userId, name, weightClass, sex, squat, bench, deadlift, total, wilks, date, competition) <> ((SSMURecord.apply _).tupled, SSMURecord.unapply)
+    def * = (id.?, userId, name, weightClass, sex, bodyweight, squat, bench, deadlift, total, wilks, date, competition) <> ((SSMURecord.apply _).tupled, SSMURecord.unapply)
   
     def user = foreignKey("USER_RECORD_FK", userId, Users.users)(_.id)
 }
@@ -46,9 +51,9 @@ object SSMURecords {
 	def populateInit() {
 		play.api.db.slick.DB.withSession{ implicit session =>
 			val currentRecords = List(
-				SSMURecord(None, 1, "Jonathan Fok kan", "-66kg", "male", 125, 80, 155, 360, 290, "2013-01-28", true),
-				SSMURecord(None, 1, "Jason Delatolla", "-83kg", "male", 215, 125,255,592.5,401, "2014-10-30", true),
-				SSMURecord(None, 1, "Jake Sha", "+100kg", "male", 125, 80, 155, 360, 290,  "1992-01-11", false)
+				SSMURecord(None, 1, "Jonathan Fok kan", "-66kg", "male", 63, 125, 80, 155, 360, 290, Some("2013-01-28"), true),
+				SSMURecord(None, 1, "Jason Delatolla", "-83kg", "male", 0, 215, 125,255,592.5,401, Some("2014-10-30"), true),
+				SSMURecord(None, 1, "Jake Sha", "+100kg", "male", 100, 125, 80, 155, 360, 290,  Some("1992-01-11"), false)
 				)
 			for(record <- currentRecords) {
 				records += record
@@ -60,6 +65,7 @@ object SSMURecords {
             name: String,
             weightClass: String,
             sex: String,
+            bodyweight: Double,
             squat: Double,
             bench: Double,
             deadlift: Double,
@@ -69,7 +75,8 @@ object SSMURecords {
             competition: Boolean) : Int = {
         import models.HtmlDateToSqlDate._
 		play.api.db.slick.DB.withSession{ implicit session =>
-			val recordId = (records returning records.map(_.id)) += SSMURecord(None, userId, name, weightClass, sex, squat, bench, deadlift, total, wilks, date, competition)
+		    val fDate : Option[Date]= if(date == "") None else Some(date)
+			val recordId = (records returning records.map(_.id)) += SSMURecord(None, userId, name, weightClass, sex, bodyweight, squat, bench, deadlift, total, wilks, fDate, competition)
 			recordId
 		}
     }
@@ -95,6 +102,7 @@ object SSMURecords {
             //name: String,
             weightClass: String,
             sex: String,
+            bodyweight: Double,
             squat: Double,
             bench: Double,
             deadlift: Double,
@@ -133,6 +141,12 @@ object SSMURecords {
     	q.invoker.execute
     }
 
+    def updateBodyWeight(id: Int, bodyweight: Double)(implicit session: Session) {
+    	val q = for { r <- records if r.id === id } yield r.bodyweight
+    	q.update(bodyweight)
+    	q.invoker.execute
+    }
+
     def updateSquat(id: Int, squat: Double)(implicit session: Session) {
     	val q = for { r <- records if r.id === id } yield r.squat
     	q.update(squat)
@@ -166,7 +180,8 @@ object SSMURecords {
     def updateDate(id: Int, date: String)(implicit session: Session) {
         import models.HtmlDateToSqlDate._
     	val q = for { r <- records if r.id === id } yield r.date
-    	q.update(date)
+		val fDate : Option[Date]= if(date == "") None else Some(date)
+    	q.update(fDate)
     	q.invoker.execute
     }
 
@@ -175,6 +190,35 @@ object SSMURecords {
     	q.update(competition)
     	q.invoker.execute
     }
+    
+    def lbsToKg(weight: Double) : Double = {
+        weight / 2.20462
+    }
+    
+    def calculateWilks(squat: Double, bench: Double, deadlift: Double, bodyweight: Double, male: Boolean) : Double = {
+    	wilksCoeff(bodyweight, male) * (squat + bench + deadlift)
+    }
+    
+    def wilksCoeff(bodyweight: Double, male: Boolean) : Double =  {
+    	val MA = -216.0475144
+    	val MB = 16.2606339
+    	val MC = -0.002388645
+    	val MD = -0.00113732
+    	val ME = 7.01863 * math.pow(10,-6)
+    	val MF = -1.291 * math.pow(10, -8)
+    	val WA = 594.31747775582
+    	val WB = -27.23842536447
+    	val WC = 0.82112226871
+    	val WD = -0.00930733913
+    	val WE = 0.00004731582
+    	val WF = -0.00000009054
+    	if(male) {
+    		500 / (MA + MB*bodyweight + MC*math.pow(bodyweight,2) + MD*math.pow(bodyweight,3) + ME*math.pow(bodyweight,4) + MF*math.pow(bodyweight,5))
+    	} else {
+    		500 / (WA + WB*bodyweight + WC*math.pow(bodyweight,2) + WD*math.pow(bodyweight,3) + WE*math.pow(bodyweight,4) + WF*math.pow(bodyweight,5))
+    	}
+    }
+
 }
 
 object HtmlDateToSqlDate {

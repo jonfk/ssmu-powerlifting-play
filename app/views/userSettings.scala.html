@@ -146,6 +146,7 @@
            						<tr>
              						<th>Name</th>
              						<th>Weight Class</th>
+             						<th>Bodyweight</th>
              						<th>Squat</th>
              						<th>Bench </th>
              						<th>Deadlift</th>
@@ -162,6 +163,7 @@
 								<tr>
 									<td>@record.name</td>
 									<td>@record.weightClass</td>
+									<td>@record.bodyweight</td>
 									<td>@record.squat</td>
 									<td>@record.bench</td>
 									<td>@record.deadlift</td>
@@ -202,7 +204,6 @@
                     		<div class="form-group">
                       			<label for="Weight Class" class="col-md-3 control-label">Weight Class</label>
                          		<div class="col-md-9">
-                         			<input type="text" class="form-control" name="weightClass" placeholder="Weight Class e.g: -83kg" value="@record.weightClass">
                          			<select name="weightClass" class="form-control">
                          				<Option selected="selected" value="@record.weightClass">@record.weightClass</Option>
                          				@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg").filter(_ !=record.weightClass)) {
@@ -213,37 +214,47 @@
                    			</div>
 
                     		<div class="form-group">
+                      			<label for="Unit" class="col-md-3 control-label">Unit</label>
+                         		<div class="col-md-9">
+                         			<select name="unit" class="form-control">
+                         				<Option selected="selected" value="kg">Kg</Option>
+                         				<Option value="lbs">lbs</Option>
+                         			</select>
+                          		</div>
+                   			</div>
+
+                    		<div class="form-group">
+                      			<label for="Bodyweight" class="col-md-3 control-label">Bodyweight</label>
+                         		<div class="col-md-9">
+                         			<input type="text" class="form-control" name="bodyweight" placeholder="Bodyweight e.g 80.0" value="@record.bodyweight">
+                          		</div>
+                   			</div>
+
+                    		<div class="form-group">
                       			<label for="Squat" class="col-md-3 control-label">Squat</label>
                          		<div class="col-md-9">
-                         			<input type="text" class="form-control" name="squat" placeholder="Squat in kg e.g 200.0" value="@record.squat">
+                         			<input type="text" class="form-control" name="squat" placeholder="Squat e.g 200.0" value="@record.squat">
                           		</div>
                    			</div>
 
                     		<div class="form-group">
                       			<label for="Bench" class="col-md-3 control-label">Bench</label>
                          		<div class="col-md-9">
-                         			<input type="text" class="form-control" name="bench" placeholder="Bench in kg e.g 100.0" value="@record.bench">
+                         			<input type="text" class="form-control" name="bench" placeholder="Bench e.g 100.0" value="@record.bench">
                           		</div>
                    			</div>
 
                     		<div class="form-group">
                       			<label for="Deadlift" class="col-md-3 control-label">Deadlift</label>
                          		<div class="col-md-9">
-                         			<input type="text" class="form-control" name="deadlift" placeholder="Total in kg e.g 300.0" value="@record.deadlift">
-                          		</div>
-                   			</div>
-
-                    		<div class="form-group">
-                      			<label for="Total" class="col-md-3 control-label">Total</label>
-                         		<div class="col-md-9">
-                         			<input type="text" class="form-control" name="total" placeholder="Total in kg e.g 600.0" value="@record.total">
+                         			<input type="text" class="form-control" name="deadlift" placeholder="Total e.g 300.0" value="@record.deadlift">
                           		</div>
                    			</div>
 
                     		<div class="form-group">
                       			<label for="wilks" class="col-md-3 control-label">Wilks</label>
                          		<div class="col-md-9">
-                         			<input type="text" class="form-control" name="wilks" placeholder="Wilks e.g 300.0" value="@record.wilks">
+                         			<input type="text" class="form-control" name="wilks" placeholder="Wilks e.g 300.0 or leave blank to be automatically calculated" value="@record.wilks">
                           		</div>
                    			</div>
 
@@ -316,37 +327,47 @@
                    		</div>
 
                     	<div class="form-group">
+                      		<label for="Unit" class="col-md-3 control-label">Unit</label>
+                         	<div class="col-md-9">
+                         		<select name="unit" class="form-control">
+                         			<Option selected="selected" value="kg">kg</Option>
+                         			<Option value="lbs">lbs</Option>
+                         		</select>
+                          	</div>
+                   		</div>
+
+                    	<div class="form-group">
+                      		<label for="Bodyweight" class="col-md-3 control-label">Bodyweight</label>
+                         	<div class="col-md-9">
+                         		<input type="text" class="form-control" name="bodyweight" placeholder="Bodyweight required to calculate wilks">
+                          	</div>
+                   		</div>
+
+                    	<div class="form-group">
                       		<label for="Squat" class="col-md-3 control-label">Squat</label>
                          	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="squat" placeholder="Squat in kg e.g 200.0">
+                         		<input type="text" class="form-control" name="squat" placeholder="Squat e.g 200.0">
                           	</div>
                    		</div>
 
                     	<div class="form-group">
                       		<label for="Bench" class="col-md-3 control-label">Bench Press</label>
                          	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="bench" placeholder="Bench in kg e.g 100.0">
+                         		<input type="text" class="form-control" name="bench" placeholder="Bench e.g 100.0">
                           	</div>
                    		</div>
 
                     	<div class="form-group">
                       		<label for="Deadlift" class="col-md-3 control-label">Deadlift</label>
                          	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="deadlift" placeholder="Deadlift in kg e.g 300.0">
-                          	</div>
-                   		</div>
-
-                    	<div class="form-group">
-                      		<label for="Total" class="col-md-3 control-label">Total</label>
-                         	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="total" placeholder="Total in kg e.g 600.0">
+                         		<input type="text" class="form-control" name="deadlift" placeholder="Deadlift e.g 300.0">
                           	</div>
                    		</div>
 
                     	<div class="form-group">
                       		<label for="Wilks" class="col-md-3 control-label">Wilks</label>
                          	<div class="col-md-9">
-                         		<input type="text" class="form-control" name="wilks" placeholder="Wilks e.g 300.0">
+                         		<input type="text" class="form-control" name="wilks" placeholder="Wilks e.g 300.0 or leave blank to be automatically calculated">
                           	</div>
                    		</div>
 

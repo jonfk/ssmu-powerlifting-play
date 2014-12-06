@@ -10,6 +10,8 @@ import play.api.db.slick.DBAction
 import play.twirl.api.Html
 import models._
 import play.api.Play
+import play.api.data._
+import play.api.data.Forms._
 
 object Settings extends Controller {
 
@@ -89,6 +91,35 @@ object Settings extends Controller {
 	    }
 	}
 	
+	case class RecordData(
+	        id: Option[String],
+	        sex: String,
+	        weightClass: String,
+	        unit: String,
+	        bodyweight: String,
+	        squat: String,
+	        bench: String,
+	        deadlift: String,
+	        wilks: String,
+	        date: String,
+	        context: String
+	)
+	val recordForm = Form(
+		mapping(
+		    "id" -> optional(text),
+			"sex" -> text,
+			"weightClass" -> text,
+			"unit" -> text,
+			"bodyweight" -> text,
+			"squat" -> text,
+			"bench" -> text,
+			"deadlift" -> text,
+			"wilks" -> text,
+			"date" -> text,
+			"context" -> text
+		)(RecordData.apply)(RecordData.unapply)
+	)
+	
 	def recordUpdate = DBAction(parse.urlFormEncoded) { implicit request =>
 	    println("record update")
 	    println(request.body)
@@ -99,19 +130,21 @@ object Settings extends Controller {
 		playSession.get("connected").map { user =>
 		   	val username = playSession.get("username").get
 		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
-		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
+		    val recordData = recordForm.bindFromRequest.get
 		   	
-		   	if(!SSMURecords.belongs(values("id").toInt, user.id.get)) {
+		   	if(!SSMURecords.belongs(recordData.id.get.toInt, user.id.get)) {
 		   		Unauthorized("Unauthorized modification of record. Record does not belong to user")
 		   	}
 
-		   	val competition = values("context") == "competition"
+		   	val competition = recordData.context == "competition"
 		   	val doubleValues : Either[Tuple5[Double, Double, Double, Double, Double], Result] = try{
-		   		Left(values("squat").toDouble,
-		   		values("bench").toDouble,
-		   		values("deadlift").toDouble,
-		   		values("total").toDouble,
-		   		values("wilks").toDouble)
+		   		Left(
+		   			if(recordData.bodyweight == "") 0 else recordData.bodyweight.toDouble,
+		   		    if(recordData.squat == "") 0 else recordData.squat.toDouble,
+		   		    if(recordData.bench == "") 0 else recordData.bench.toDouble,
+		   		    if(recordData.deadlift == "") 0 else recordData.deadlift.toDouble,
+		   		    if(recordData.wilks == "") 0 else recordData.wilks.toDouble
+		   		)
 		   	} catch {
 		   		case ex: NumberFormatException => 
 		   		    println("invalid input for squat, bench, deadlift, total or wilks")
@@ -124,16 +157,19 @@ object Settings extends Controller {
 		   	if(doubleValues.isRight) {
 		   	    doubleValues.right.get
 		   	} else {
-		   	    val (squat, bench, deadlift, total, wilks) = doubleValues.left.get
-		   		SSMURecords.updateRecord(values("id").toInt,
-		   	        values("weightClass"),
-		   	        values("sex"),
+		   	    val (bodyweight, squat, bench, deadlift, wilks) = doubleValues.left.get
+		   	    val fWilks = if(wilks == 0 && bodyweight != 0) SSMURecords.calculateWilks(squat, bench, deadlift, bodyweight, recordData.sex == "male") else wilks
+		   	    val total = squat + bench + deadlift
+		   		SSMURecords.updateRecord(recordData.id.get.toInt,
+		   	        recordData.weightClass,
+		   	        recordData.sex,
+		   	        bodyweight,
 		   	        squat,
 		   	        bench,
 		   	        deadlift,
 		   	        total,
-		   	        wilks,
-		   	        values("date"),
+		   	        fWilks,
+		   	        recordData.date,
 		   	        competition)
 		   	
 		   	    Redirect(routes.Settings.settings)
@@ -154,15 +190,17 @@ object Settings extends Controller {
 		playSession.get("connected").map { user =>
 		   	val username = playSession.get("username").get
 		    val user = Users.getUser(username).getOrElse(User(None,"","","","",""))
-		    val values = request.body.map{ case (name, value) => (name, value.mkString(""))}
+		    val recordData = recordForm.bindFromRequest.get
 
-		   	val competition = values("context") == "competition"
+		   	val competition = recordData.context == "competition"
 		   	val doubleValues : Either[Tuple5[Double, Double, Double, Double, Double], Result] = try{
-		   		Left(values("squat").toDouble,
-		   		values("bench").toDouble,
-		   		values("deadlift").toDouble,
-		   		values("total").toDouble,
-		   		values("wilks").toDouble)
+		   		Left(
+		   			if(recordData.bodyweight == "") 0 else recordData.bodyweight.toDouble,
+		   		    if(recordData.squat == "") 0 else recordData.squat.toDouble,
+		   		    if(recordData.bench == "") 0 else recordData.bench.toDouble,
+		   		    if(recordData.deadlift == "") 0 else recordData.deadlift.toDouble,
+		   		    if(recordData.wilks == "") 0 else recordData.wilks.toDouble
+		   		)
 		   	} catch {
 		   		case ex: NumberFormatException => 
 		   		    println("invalid input for squat, bench, deadlift, total or wilks")
@@ -175,9 +213,11 @@ object Settings extends Controller {
 		   	if(doubleValues.isRight) {
 		   	    doubleValues.right.get
 		   	} else {
-		   	    val (squat, bench, deadlift, total, wilks) = doubleValues.left.get
+		   	    val (bodyweight, squat, bench, deadlift, wilks) = doubleValues.left.get
+		   	    val fWilks = if(wilks == 0 && bodyweight != 0) SSMURecords.calculateWilks(squat, bench, deadlift, bodyweight, recordData.sex == "male") else wilks
+		   	    val total = squat + bench + deadlift
 		   	    val name = if(user.firstname == "") user.username else user.firstname + " " + user.lastname
-		   	    SSMURecords.create(user.id.get, name, values("weightClass"), values("sex"), squat, bench, deadlift, total, wilks, values("date"), competition)
+		   	    SSMURecords.create(user.id.get, name, recordData.weightClass, recordData.sex, bodyweight, squat, bench, deadlift, total, fWilks, recordData.date, competition)
 		   	
 		   	    Redirect(routes.Settings.settings)
 		   	}
