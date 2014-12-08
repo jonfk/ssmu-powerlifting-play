@@ -196,7 +196,8 @@ object SSMURecords {
     }
     
     def calculateWilks(squat: Double, bench: Double, deadlift: Double, bodyweight: Double, male: Boolean) : Double = {
-    	wilksCoeff(bodyweight, male) * (squat + bench + deadlift)
+    	val wilks = wilksCoeff(bodyweight, male) * (squat + bench + deadlift)
+    	"%.2f".format(wilks).toDouble
     }
     
     def wilksCoeff(bodyweight: Double, male: Boolean) : Double =  {

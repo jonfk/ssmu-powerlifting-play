@@ -73,7 +73,7 @@
                          	<div class="col-md-9">
                          		<select name="weightClass" class="form-control">
                          			<Option selected="selected" value="@profile.weightClass">@profile.weightClass</Option>
-                         			@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg").filter(_ !=profile.weightClass)) {
+                         			@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg", "-43kg", "-47kg", "-52kg", "-57kg", "-63kg", "-72kg", "-84kg", "+84kg").filter(_ !=profile.weightClass)) {
                          			<Option value="@weight">@weight</Option>
                          			}
                          		</select>
@@ -206,7 +206,7 @@
                          		<div class="col-md-9">
                          			<select name="weightClass" class="form-control">
                          				<Option selected="selected" value="@record.weightClass">@record.weightClass</Option>
-                         				@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg").filter(_ !=record.weightClass)) {
+                         				@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg", "-43kg", "-47kg", "-52kg", "-57kg", "-63kg", "-72kg", "-84kg", "+84kg").filter(_ !=profile.weightClass)) {
                          				<Option value="@weight">@weight</Option>
                          				}
                          			</select>
@@ -322,6 +322,18 @@
                          			<Option value="-105kg">-105kg</Option>
                          			<Option value="-120kg">-120kg</Option>
                          			<Option value="+120kg">+120kg</Option>
+                         			<Option value="-43kg">-43kg</Option>
+                         			<Option value="-47kg">-47kg</Option>
+                         			<Option value="-52kg">-52kg</Option>
+                         			<Option value="-57kg">-57kg</Option>
+                         			<Option value="-63kg">-63kg</Option>
+                         			<Option value="-72kg">-72kg</Option>
+                         			<Option value="-84kg">-84kg</Option>
+                         			<Option value="+84kg">+84kg</Option>
+                         		</select>
+                          	</div>
+                   		</div>
+
                          		</select>
                           	</div>
                    		</div>
