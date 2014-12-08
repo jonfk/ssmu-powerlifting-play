@@ -206,7 +206,7 @@
                          		<div class="col-md-9">
                          			<select name="weightClass" class="form-control">
                          				<Option selected="selected" value="@record.weightClass">@record.weightClass</Option>
-                         				@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg", "-43kg", "-47kg", "-52kg", "-57kg", "-63kg", "-72kg", "-84kg", "+84kg").filter(_ !=profile.weightClass)) {
+                         				@for(weight <- List("", "-53kg", "-59kg", "-66kg", "-74kg", "-83kg", "-93kg", "-105kg", "-120kg", "+120kg", "-43kg", "-47kg", "-52kg", "-57kg", "-63kg", "-72kg", "-84kg", "+84kg").filter(_ !=record.weightClass)) {
                          				<Option value="@weight">@weight</Option>
                          				}
                          			</select>
