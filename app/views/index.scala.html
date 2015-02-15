@@ -1,6 +1,6 @@
-@(news: List[NewsItem], loggedIn: Boolean = false, username: String = "")
+@(news: List[NewsItem], user: Option[User] = None)
 
-@main("SSMU Powerlifting", loggedIn = loggedIn, username = username) {
+@main("SSMU Powerlifting", user = user) {
     <!-- Header Carousel -->
     <header id="myCarousel" class="carousel slide">
         <!-- Indicators -->
@@ -62,7 +62,7 @@
                 		<tr>
                 			<td>
                 				<h4>@newsItem.title <small>on @newsItem.date.toString</small></h4>
-                				@newsItem.content
+                				@Html(newsItem.content)
                 				<br>
                 				<i>by @newsItem.author</i>
                 			</td>

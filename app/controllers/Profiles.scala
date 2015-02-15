@@ -11,9 +11,10 @@ import models.SSMUProfiles
 import models.Users
 import models.User
 import models.SSMUProfile
+import actions.AuthenticatedActions._
 
 object Profiles extends Controller {
-    def profile(username: String) = DBAction { implicit request =>
+    def profile(username: String) = AuthenticatedWithDBAction(optionalLogin = true) { implicit request =>
         implicit val session = request.dbSession
 
         val profileValues : Either[Tuple4[User, SSMUProfile, List[SSMURecord], List[SSMURecord]], Result]= (for{u <- Users.users if u.username === username} yield u).list match {
@@ -25,29 +26,26 @@ object Profiles extends Controller {
         			val meetRecords = (for{ r <- SSMURecords.records if r.userId === user.id && r.competition} yield r).list
         			val trainingRecords = (for{ r <- SSMURecords.records if r.userId === user.id && !r.competition} yield r).list
         			Left((user, profile, meetRecords, trainingRecords))
-        			//Ok(views.html.profile(user, profile, meetRecords, trainingRecords, loggedIn=true, username=loggedInUsername)).withSession(playSession)
         		} else {
         			Right(Ok("User " + username + " does not have a profile"))
         		}
         }
 
-	    val playSession = request.session
-		playSession.get("connected").map { user =>
-		    val loggedInUsername = playSession.get("username").get
-		    
-		    profileValues match {
-		        case Right(r) =>
-		            r
-		        case Left((user, profile, meetRecords, trainingRecords)) =>
-        			Ok(views.html.profile(user, profile, meetRecords, trainingRecords, loggedIn=true, username=loggedInUsername)).withSession(playSession)
-		    }
-		}.getOrElse {
-		    profileValues match {
-		        case Right(r) =>
-		            r
-		        case Left((user, profile, meetRecords, trainingRecords)) =>
-        			Ok(views.html.profile(user, profile, meetRecords, trainingRecords))
-		    }
-		}
+       request.user match {
+           case Some(userLoggedIn) =>
+               profileValues match {
+                   case Right(r) =>
+                       r
+                   case Left((user, profile, meetRecords, trainingRecords)) =>
+                       Ok(views.html.profile(user, profile, meetRecords, trainingRecords, userLoggedIn=Some(userLoggedIn))).withSession(request.session)
+               }
+           case None =>
+               profileValues match {
+                   case Right(r) =>
+                       r
+                   case Left((user, profile, meetRecords, trainingRecords)) =>
+                       Ok(views.html.profile(user, profile, meetRecords, trainingRecords))
+               }
+       }
     }
 }

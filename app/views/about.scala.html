@@ -1,6 +1,6 @@
-@(team: List[SSMUProfile], teamUsers: List[User], loggedIn: Boolean = false, username:String = "")
+@(team: List[SSMUProfile], teamUsers: List[User], user:Option[User] = None)
 
-@main("About", loggedIn=loggedIn, username=username) {
+@main("About", user=user) {
     <!-- Page Content -->
     <div class="container">
 

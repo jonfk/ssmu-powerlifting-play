@@ -1,6 +1,6 @@
-@(loggedIn: Boolean=false, username: String = "")
+@(user : Option[User] = None)
 
-@main("Contact us", loggedIn=loggedIn, username=username) {
+@main("Contact us", user=user) {
     <!-- Page Content -->
     <div class="container">
 

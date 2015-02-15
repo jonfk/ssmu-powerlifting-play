@@ -2,9 +2,9 @@
 profile: SSMUProfile,
 meetRecords: List[SSMURecord],
 trainingRecords: List[SSMURecord],
-loggedIn: Boolean = false, username:String = "")
+userLoggedIn: Option[User] = None)
 
-@main(user.username + "'s Profile", loggedIn=loggedIn, username=username) {
+@main(user.username + "'s Profile", user=userLoggedIn) {
     <div class="container">
 
         <!-- Page Heading/Breadcrumbs -->

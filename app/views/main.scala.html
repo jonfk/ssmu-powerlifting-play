@@ -1,4 +1,4 @@
-@(title: String, loggedIn: Boolean = false, username: String = "")(content: Html)
+@(title: String, user: Option[User] = None)(content: Html)
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,8 +52,8 @@
                 </button>
                 <a class="navbar-brand" href="/" style="font-family:Garamond, Georgia, serif">
                 SSMU Powerlifting
-                @if(loggedIn){
-                	<small style="font-family:sans-serif;font-size:60%">Hi @username</small>
+                @if(user != None){
+                	<small style="font-family:sans-serif;font-size:60%">Hi @user.get.username</small>
                 }
                 </a>
             </div>
@@ -69,9 +69,23 @@
                     <li>
                         <a href="/contact">Contact</a>
                     </li>
-                    @if(loggedIn){
+                    @if(user != None){
                     <li>
                         <a href="/settings">Settings</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Editor <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/editor/articles">Articles </a>
+                            </li>
+                        @if(user.get.power == "admin"){
+                            <li>
+                                <a href="/editor/news">News </a>
+                            </li>
+
+                        }
+                        </ul>
                     </li>
                     <li>
                         <a href="/logout"><b>Logout</b></a>

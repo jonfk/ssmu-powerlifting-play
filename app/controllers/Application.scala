@@ -10,42 +10,41 @@ import play.api.db.slick.DBAction
 import models.SSMUProfiles
 import models.NewsItems
 import models.Users
+import actions.AuthenticatedActions._
 
 object Application extends Controller {
 
-	def index() = DBAction { implicit request =>
+	def index() = AuthenticatedWithDBAction(optionalLogin = true) { implicit request =>
 	    implicit val session = request.dbSession
 	    
 	    val news = NewsItems.getNews()
 
-	    val playSession = request.session
-		playSession.get("connected").map { user =>
-		    val username = playSession.get("username").get
-			Ok(views.html.index(news, loggedIn=true, username=username)).withSession(playSession)
-		}.getOrElse {
-			//Unauthorized("Oops, you are not connected")
-			Ok(views.html.index(news))
-		}
+        request.user match {
+            case Some(user) =>
+                Ok(views.html.index(news, user=Some(user))).withSession(request.session)
+            case None =>
+                Ok(views.html.index(news))
+        }
 	}
 
-	def about = DBAction { implicit request =>
+	def about = AuthenticatedWithDBAction(optionalLogin = true) { implicit request =>
 	    implicit val session = request.dbSession
+
 	    val team = SSMUProfiles.profiles.list
 	    val teamUsers = team.map{ profile =>
 	        (for{u <- Users.users if u.id === profile.userId } yield u).list.head
 	    }
+
+        request.user match {
+            case Some(user) =>
+                Ok(views.html.about(team, teamUsers, user=Some(user))).withSession(request.session)
+            case None =>
+                Ok(views.html.about(team, teamUsers))
+        }
 	    
-	    val playSession = request.session
-		playSession.get("connected").map { user =>
-		    val username = playSession.get("username").get
-			Ok(views.html.about(team, teamUsers, loggedIn=true, username=username)).withSession(playSession)
-		}.getOrElse {
-			//Unauthorized("Oops, you are not connected")
-			Ok(views.html.about(team, teamUsers))
-		}
 	}
 
-	def records = DBAction { implicit request =>
+	def records = AuthenticatedWithDBAction(optionalLogin = true) { implicit request =>
 	    implicit val session = request.dbSession
 	    val menMeet = (for{record <- SSMURecords.records if record.sex === "male" && record.competition} yield record).list
 	    val womenMeet = (for{record <- SSMURecords.records if record.sex === "female" && record.competition} yield record).list
@@ -64,13 +63,12 @@ object Application extends Controller {
 	        (for{u <- Users.users if u.id === record.userId } yield u).list.head
 	    }
 
-	    val playSession = request.session
-		playSession.get("connected").map { user =>
-		    val username = playSession.get("username").get
-			Ok(views.html.records(menMeet, womenMeet, menTraining, womenTraining,mmrUsers,wmrUsers,mtrUsers,wtrUsers,loggedIn=true, username=username)).withSession(playSession)
-		}.getOrElse {
-			Ok(views.html.records(menMeet, womenMeet, menTraining, womenTraining,mmrUsers,wmrUsers,mtrUsers,wtrUsers))
-		}
+        request.user match {
+            case Some(user) =>
+                Ok(views.html.records(menMeet, womenMeet, menTraining, womenTraining,mmrUsers,wmrUsers,mtrUsers,wtrUsers, user=Some(user))).withSession(request.session)
+            case None =>
+                Ok(views.html.records(menMeet, womenMeet, menTraining, womenTraining,mmrUsers,wmrUsers,mtrUsers,wtrUsers))
+        }
 	}
 	
 	def notFound = Action { request =>

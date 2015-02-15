@@ -40,6 +40,8 @@ object Global extends GlobalSettings {
             case ex: JdbcSQLException =>
                 println("Database already populated or tables already created")
                 ex.printStackTrace()
+            case ex: org.postgresql.util.PSQLException =>
+                println("Database already populated or tables already created")
             case e: Exception =>
                 println("Unknown Exception")
                 e.printStackTrace()

@@ -6,9 +6,9 @@
 	wmrUsers: List[User],
 	mtrUsers: List[User],
 	wtrUsers: List[User],
-	loggedIn: Boolean = false, username: String = "")
+	user: Option[User] = None)
 
-@main("SSMU Records", loggedIn=loggedIn, username=username) {
+@main("SSMU Records", user=user) {
     <!-- Page Content -->
     <div class="container">
 

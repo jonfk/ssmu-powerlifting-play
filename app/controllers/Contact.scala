@@ -8,20 +8,18 @@ import models.SSMURecords
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DBAction
 import play.twirl.api.Html
+import actions.AuthenticatedActions._
 
 object Contact extends Controller {
 
-	def contact = Action { request =>
+	def contact = Authenticated(optionalLogin = true) { request =>
 
-	    val playSession = request.session
-		playSession.get("connected").map { user =>
-		    val username = playSession.get("username").get
-			Ok(views.html.contact(loggedIn=true, username=username)).withSession(playSession)
-		}.getOrElse {
-			//Unauthorized("Oops, you are not connected")
-			Ok(views.html.contact())
-		}
-
+        request.user match {
+            case Some(user) =>
+                Ok(views.html.contact(user=Some(user))).withSession(request.session)
+            case None =>
+                Ok(views.html.contact())
+        }
 	}
 
 	def contactPost = Action { request =>
