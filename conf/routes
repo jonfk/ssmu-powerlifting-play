@@ -20,6 +20,8 @@ POST	/settings/deleterecord		controllers.Settings.recordDelete
 POST	/settings/user				controllers.Settings.userUpdate
 GET		/profile/:username			controllers.Profiles.profile(username: String)
 GET		/profiles/images/:image		controllers.Picture.at(image: String)
+GET		/editor/news				controllers.Content.newsEditor
+POST    /editor/news                controllers.Content.newNews
 GET		/404						controllers.Application.notFound
 
 # Map static resources from the /public folder to the /assets URL path
