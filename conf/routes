@@ -23,6 +23,7 @@ GET		/profiles/images/:image		controllers.Picture.at(image: String)
 GET		/editor/news				controllers.Content.newsEditor(id: Option[Int])
 POST    /editor/news                controllers.Content.newNews
 GET     /editor/news/delete         controllers.Content.deleteNewsItem(id: Option[Int])
+GET     /schedule                   controllers.Schedule.schedule
 GET		/404						controllers.Application.notFound
 
 # Map static resources from the /public folder to the /assets URL path
