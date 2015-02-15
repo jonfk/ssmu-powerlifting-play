@@ -28,8 +28,8 @@ object Global extends GlobalSettings {
             	writer.write(stmts)
         	    writer.close
         	    // Disable for live run
-        	    println("creating tables")
-            	( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ++ NewsItems.news.ddl ).create
+//        	    println("creating tables")
+//            	( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ++ NewsItems.news.ddl ).create
         	}
 
         	Users.populateInit
@@ -57,8 +57,8 @@ object Global extends GlobalSettings {
         	writer.write(stmts)
         	writer.close
         	// disable for live run
-        	println("dropping databases")
-        	(SSMURecords.records.ddl ++ SSMUProfiles.profiles.ddl ++ Users.users.ddl ++ NewsItems.news.ddl ).drop
+//        	println("dropping databases")
+//        	(SSMURecords.records.ddl ++ SSMUProfiles.profiles.ddl ++ Users.users.ddl ++ NewsItems.news.ddl ).drop
         }
     }  
     
