@@ -36,6 +36,7 @@ object Users {
 		play.api.db.slick.DB.withSession{ implicit session =>
 			val initUsers = List(
 			        create("jonesdoe2@gmail.com", "jfk", "Jonathan", "Fok kan", "1234", "admin"),
+                    create("admin2@gmail.com", "admin2", "adminName", "adminLast", "1111", "admin"),
 			        create("testuser@gmail.com", "test", "test", "user", "9999")
 				)
 			for(user <- initUsers) {

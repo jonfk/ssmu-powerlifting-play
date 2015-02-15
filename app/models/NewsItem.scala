@@ -48,4 +48,10 @@ object NewsItems {
         news.sortBy(n => n.date.desc).list
 		//(for{n <- news} yield n).list
 	}
+
+    def deleteNews(id : Int) (implicit session: Session) {
+        val q = for { item <- news if item.id === id } yield item
+        q.delete
+        q.invoker.execute
+    }
 }
