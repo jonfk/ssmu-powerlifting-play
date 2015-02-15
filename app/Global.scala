@@ -32,10 +32,11 @@ object Global extends GlobalSettings {
 //            	( Users.users.ddl ++ SSMUProfiles.profiles.ddl ++ SSMURecords.records.ddl ++ NewsItems.news.ddl ).create
         	}
 
-        	Users.populateInit
-        	SSMURecords.populateInit
-        	SSMUProfiles.populateInit
-        	NewsItems.populateInit
+            // Disable for live run
+//        	Users.populateInit
+//        	SSMURecords.populateInit
+//        	SSMUProfiles.populateInit
+//        	NewsItems.populateInit
         } catch {
             case ex: JdbcSQLException =>
                 println("Database already populated or tables already created")
