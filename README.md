@@ -2,6 +2,8 @@ SSMU Powerlifting website
 =========================
 Simple website for ssmu powerlifting club with profiles for club members
 
+[![Build Status](https://travis-ci.org/jonfk/ssmu-powerlifting-play.svg?branch=master)](https://travis-ci.org/jonfk/ssmu-powerlifting-play)
+
 
 Ideas
 -----
