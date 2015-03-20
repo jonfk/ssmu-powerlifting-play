@@ -1,14 +1,8 @@
 SSMU Powerlifting website
 =========================
-Simple website for ssmu powerlifting club with profiles for club members
+Website for ssmu powerlifting club with profiles for club members
 
-
-Ideas
------
-- Badge system for personal bests, overall best, etc
-- Workout tracking?
-
-##TODO before serving to public:
+##Instructions to deploy
 
 ###Setting up the postgresql server:
 Install Postgres
@@ -38,6 +32,7 @@ Create tables
     psql -U postgres -d ssmupowerlifting -a -f SQL/create.sql
 
 ###Before live run
+Change the following in conf/application.conf
 - change application secret
 - change database and database username and password
 
