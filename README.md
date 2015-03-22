@@ -1,9 +1,11 @@
 SSMU Powerlifting website
 =========================
+
+[![Build Status](https://travis-ci.org/jonfk/ssmu-powerlifting-play.svg?branch=master)](https://travis-ci.org/jonfk/ssmu-powerlifting-play)
+
 Website for ssmu powerlifting club with profiles for club members
 
 ##Instructions to deploy
-
 ###Setting up the postgresql server:
 Install Postgres
 
